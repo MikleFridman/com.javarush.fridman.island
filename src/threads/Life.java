@@ -1,4 +1,8 @@
-package creatures.animals;
+package threads;
+
+import creatures.animals.Animal;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class Life extends Thread {
 
@@ -12,10 +16,11 @@ public class Life extends Thread {
     @Override
     public void run() {
         while (!isInterrupted()) {
-            object.eat();
-            object.reproduce();
 
             try {
+                object.eat();
+                Thread.sleep(1000);
+                object.reproduce();
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);

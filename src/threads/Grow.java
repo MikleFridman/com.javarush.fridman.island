@@ -1,4 +1,6 @@
-package creatures;
+package threads;
+
+import creatures.Grass;
 
 public class Grow extends Thread {
 

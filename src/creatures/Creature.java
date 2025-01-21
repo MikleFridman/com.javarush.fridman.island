@@ -1,4 +1,4 @@
-package animals;
+package creatures;
 
 public abstract class Creature {
 

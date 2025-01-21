@@ -1,10 +1,12 @@
-package animals;
+package creatures.animals;
+import location.Location;
 
 public class Wolf extends Predator {
 
-    public final static int defaultWeight = 80;
+    public final static double defaultWeight = 80.0;
 
-    public Wolf() {
+    public Wolf(Location location) {
+        super(location);
         setWeight(defaultWeight);
     }
 

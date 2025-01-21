@@ -1,4 +1,5 @@
-import creatures.animals.Herbivore;
+package creatures.animals;
+
 import location.Location;
 
 public class Cow extends Herbivore {
