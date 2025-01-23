@@ -2,16 +2,15 @@ package creatures;
 import location.Location;
 import threads.Grow;
 
-public class Grass extends Creature {
-
-    public final static int MAX_WEIGHT = 300;
+public class Plant extends Creature {
+    public final static int GROWTH_RATE = 100;
+    public final static int MAX_WEIGHT = 500;
     public Location location;
     private double weight;
 
-    public Grass(Location location) {
+    public Plant(Location location) {
         this.location = location;
         location.addCreature(this);
-        //System.out.println(location + " добавлен объект " + this);
         new Grow(this);
     }
 
@@ -29,7 +28,7 @@ public class Grass extends Creature {
     }
 
     public void increaseWeight() {
-        setWeight(getWeight() + 50);
+        setWeight(getWeight() + GROWTH_RATE);
     }
 
     public void decreaseWeight(double weight) {

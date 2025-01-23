@@ -1,13 +1,11 @@
 package location;
 import creatures.Creature;
-import creatures.Grass;
+import creatures.Plant;
 import creatures.animals.Herbivore;
-
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Location {
-
     public int x;
     public int y;
     public final Map<Class<? extends Creature>, ArrayList<Creature>> creaturesMap = new HashMap<>();
@@ -25,7 +23,7 @@ public class Location {
                 '}';
     }
 
-    public ArrayList<Creature> getCreaturesArray(Class<? extends Creature> clazz) {
+    public ArrayList<Creature> getCreatureArray(Class<? extends Creature> clazz) {
         return creaturesMap.get(clazz);
     }
 
@@ -46,50 +44,45 @@ public class Location {
         list.remove(o);
     }
 
-    public synchronized String getDashboard(){
-        String dashboard = "" + this;
-        double weightGrass = 0;
+    public String getInfo(){
+        double weightPlant = 0;
+        StringBuilder info = new StringBuilder("" + this);
 
         for (Class<? extends Creature> o : creaturesMap.keySet()) {
-            if (o != Grass.class) {
-                dashboard = dashboard + " " + o.getSimpleName() +
-                        ": " + creaturesMap.get(o).toArray().length + ";";
+            if (o != Plant.class) {
+                info.append(" ").append(o.getSimpleName()).append(": ")
+                    .append(creaturesMap.get(o).toArray().length).append(";");
             }
         }
 
-        if (getGrass() != null) {
-            weightGrass = (double) Math.round(getGrass().getWeight() * 100) / 100;
+        if (getPlant() != null) {
+            weightPlant = (double) Math.round(getPlant().getWeight() * 100) / 100;
         }
 
-        dashboard = dashboard + " Grass: " + weightGrass;
-        return dashboard;
+        info.append(" Plant: ").append(weightPlant);
+        return info.toString();
     }
 
-    public Grass getGrass() {
-        List<Creature> listGrass = getCreaturesArray(Grass.class);
+    public Plant getPlant() {
+        List<Creature> listGrass = getCreatureArray(Plant.class);
 
         if (listGrass.get(0) != null) {
-            Grass grass = (Grass) listGrass.get(0);
-            if (grass.getWeight() > 0) {
-                return grass;
+            Plant plant = (Plant) listGrass.get(0);
+            if (plant.getWeight() > 0) {
+                return plant;
             }
         }
-
         return null;
     }
 
-    public synchronized List<Herbivore> getListHerbivore() throws ClassNotFoundException {
-        List<Herbivore> listHerbivore = new CopyOnWriteArrayList<>();
+    public synchronized List<Creature> getListHerbivore() throws ClassNotFoundException {
+        List<Creature> listHerbivore = new CopyOnWriteArrayList<>();
 
         for (Class<? extends Creature> o : creaturesMap.keySet()) {
             if (Herbivore.class.isAssignableFrom(o)) {
-                for (Creature creature : creaturesMap.get(o)) {
-                    listHerbivore.add((Herbivore) creature);
-                }
+                listHerbivore.addAll(creaturesMap.get(o));
             }
         }
-
         return listHerbivore;
     }
-
 }

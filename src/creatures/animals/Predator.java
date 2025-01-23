@@ -1,5 +1,7 @@
 package creatures.animals;
+import creatures.Creature;
 import location.Location;
+import utils.Util;
 import java.util.List;
 import java.util.Random;
 
@@ -11,7 +13,7 @@ public abstract class Predator extends Animal {
 
     @Override
     public void eat() {
-        List<Herbivore> listHerbivore;
+        List<Creature> listHerbivore;
         Herbivore prey;
 
         try {
@@ -21,26 +23,26 @@ public abstract class Predator extends Animal {
         }
 
         if (listHerbivore == null || listHerbivore.isEmpty()) {
+            Util.setMsg("Хищникам нечего есть");
             return;
         }
 
-        prey = listHerbivore.get(new Random().nextInt(0,listHerbivore.size()));
-
-        if (new Random().nextInt(0, 100) <= prey.getSurvivalChance()) {
-            //System.out.println(prey + " убежал от " + this);
+        prey = (Herbivore) listHerbivore.get(new Random().nextInt(0,listHerbivore.size()));
+        try {
+            if (new Random().nextInt(0, 100) <= prey.getSurvivalChance()) {
+                Util.setMsg(prey + " убежал от " + this);
+                return;
+            }
+        } catch (Exception e) {
             return;
         }
 
         double foodWeight = Math.min(prey.getWeight(), getOriginalWeight() - getWeight());
         foodWeight = (double) Math.round(foodWeight * 100) / 100;
-
-        if (foodWeight < 0.001) {
-            return;
+        if (foodWeight > 0) {
+            setWeight(getWeight() + foodWeight);
+            Util.setMsg(this + " cъел " + foodWeight + " от " + prey);
+            prey.die();
         }
-
-        prey.die();
-        setWeight(getWeight() + foodWeight);
-        //System.out.println(this + " cъел " + foodWeight + " от " + prey);
     }
-
 }

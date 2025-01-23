@@ -1,12 +1,10 @@
 package threads;
-
-import creatures.Grass;
+import creatures.Plant;
 
 public class Grow extends Thread {
+    Plant object;
 
-    Grass object;
-
-    public Grow(Grass o) {
+    public Grow(Plant o) {
         object = o;
         this.start();
     }
@@ -21,13 +19,9 @@ public class Grow extends Thread {
                 throw new RuntimeException(e);
             }
 
-            object.increaseWeight();
-
-            if (object.getWeight() >= Grass.MAX_WEIGHT) {
-                this.interrupt();
+            if (object.getWeight() < Plant.MAX_WEIGHT) {
+                object.increaseWeight();
             }
         }
-
-
     }
 }
