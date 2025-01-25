@@ -1,17 +1,16 @@
 package creatures;
 import location.Location;
-import threads.Grow;
+import utils.Util;
 
 public class Plant extends Creature {
-    public final static int GROWTH_RATE = 100;
+    public final static int GROW_RATE = 150;
     public final static int MAX_WEIGHT = 500;
     public Location location;
     private double weight;
 
     public Plant(Location location) {
         this.location = location;
-        location.addCreature(this);
-        new Grow(this);
+        location.setPlant(this);
     }
 
     public synchronized double getWeight() {
@@ -22,17 +21,19 @@ public class Plant extends Creature {
         this.weight = weight;
     }
 
-    @Override
-    public String toString() {
-        return location + " " + getClass().getSimpleName();
-    }
-
-    public void increaseWeight() {
-        setWeight(getWeight() + GROWTH_RATE);
+    public void grow() {
+        if (getWeight() < MAX_WEIGHT) {
+            setWeight(getWeight() + GROW_RATE);
+            Util.setMsg(location + " Растет трава");
+        }
     }
 
     public void decreaseWeight(double weight) {
         setWeight(getWeight() >= weight ? getWeight() - weight : 0);
     }
 
+    @Override
+    public String toString() {
+        return location + " " + getClass().getSimpleName();
+    }
 }

@@ -1,18 +1,35 @@
 package location;
 import creatures.Creature;
 import creatures.Plant;
+import creatures.animals.Animal;
 import creatures.animals.Herbivore;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Location {
     public int x;
     public int y;
-    public final Map<Class<? extends Creature>, ArrayList<Creature>> creaturesMap = new HashMap<>();
+    private Plant plant;
+    private final Lock lock = new ReentrantLock();
+    public final Map<Class<? extends Animal>, ArrayList<Animal>> animalsMap = new HashMap<>();
 
     public Location(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public Lock getLock() {
+        return lock;
+    }
+
+    public Plant getPlant() {
+        return plant;
+    }
+
+    public void setPlant(Plant plant) {
+        this.plant = plant;
     }
 
     @Override
@@ -23,64 +40,44 @@ public class Location {
                 '}';
     }
 
-    public ArrayList<Creature> getCreatureArray(Class<? extends Creature> clazz) {
-        return creaturesMap.get(clazz);
+    public ArrayList<Animal> getCreatureArray(Class<? extends Animal> clazz) {
+        return animalsMap.get(clazz);
     }
 
-    public void addCreature(Creature o) {
-        List<Creature> list = creaturesMap.get(o.getClass());
+    public void addAnimal(Animal o) {
+        List<Animal> list = animalsMap.get(o.getClass());
         if (list == null) {
-            var newList = new ArrayList<Creature>();
+            var newList = new ArrayList<Animal>();
             newList.add(o);
-            creaturesMap.put(o.getClass(),newList);
+            animalsMap.put(o.getClass(),newList);
         } else {
             list.add(o);
         }
-
     }
 
-    public void deleteCreature(Creature o) {
-        List<Creature> list = creaturesMap.get(o.getClass());
+    public void deleteAnimal(Animal o) {
+        List<Animal> list = animalsMap.get(o.getClass());
         list.remove(o);
     }
 
     public String getInfo(){
-        double weightPlant = 0;
         StringBuilder info = new StringBuilder("" + this);
-
-        for (Class<? extends Creature> o : creaturesMap.keySet()) {
-            if (o != Plant.class) {
-                info.append(" ").append(o.getSimpleName()).append(": ")
-                    .append(creaturesMap.get(o).toArray().length).append(";");
-            }
+        for (Class<? extends Animal> o : animalsMap.keySet()) {
+            info.append(" ").append(o.getSimpleName()).append(": ")
+                .append(animalsMap.get(o).toArray().length).append(";");
         }
-
-        if (getPlant() != null) {
-            weightPlant = (double) Math.round(getPlant().getWeight() * 100) / 100;
-        }
-
+        double weightPlant = (double) Math.round(getPlant().getWeight() * 100) / 100;
         info.append(" Plant: ").append(weightPlant);
         return info.toString();
     }
 
-    public Plant getPlant() {
-        List<Creature> listGrass = getCreatureArray(Plant.class);
-
-        if (listGrass.get(0) != null) {
-            Plant plant = (Plant) listGrass.get(0);
-            if (plant.getWeight() > 0) {
-                return plant;
-            }
-        }
-        return null;
-    }
-
-    public synchronized List<Creature> getListHerbivore() throws ClassNotFoundException {
-        List<Creature> listHerbivore = new CopyOnWriteArrayList<>();
-
-        for (Class<? extends Creature> o : creaturesMap.keySet()) {
-            if (Herbivore.class.isAssignableFrom(o)) {
-                listHerbivore.addAll(creaturesMap.get(o));
+    public synchronized List<Animal> getListHerbivore(Set<Class<? extends Herbivore>> classesSet) {
+        List<Animal> listHerbivore = new CopyOnWriteArrayList<>();
+        for (Class<? extends Animal> clazz : animalsMap.keySet()) {
+            if (Herbivore.class.isAssignableFrom(clazz)) {
+                if (classesSet.contains(clazz) || classesSet.contains(Herbivore.class)) {
+                    listHerbivore.addAll(animalsMap.get(clazz));
+                }
             }
         }
         return listHerbivore;

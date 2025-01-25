@@ -4,18 +4,9 @@ import location.Location;
 import utils.Util;
 
 public abstract class Herbivore extends Animal {
-    public final static int SURVIVAL_CHANCE = 0;
 
     public Herbivore(Location location) {
         super(location);
-    }
-
-    public int getSurvivalChance() {
-        try {
-            return this.getClass().getField("SURVIVAL_CHANCE").getInt(this);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            return 0;
-        }
     }
 
     @Override

@@ -3,8 +3,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Island {
-    public final int maxLongitude = 1;
-    public final int maxLatitude = 1;
+    public static final int MAX_LONGITUDE = 10;
+    public static final int MAX_LATITUDE = 10;
     private static Island instance;
     public final List<Location> locationsList = new ArrayList<>();
     public int countAnimals;
@@ -17,7 +17,14 @@ public class Island {
         if (instance == null) {
             instance = new Island();
         }
-
         return instance;
+    }
+
+    public Location getLocation(int x, int y) {
+        for (Location location : locationsList) {
+            if (location.x == x && location.y == y)
+                return location;
+        }
+        return null;
     }
 }

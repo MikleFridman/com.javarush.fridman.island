@@ -2,38 +2,32 @@ package creatures.animals;
 import creatures.Creature;
 import location.Island;
 import location.Location;
-import threads.Life;
 import utils.Util;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Animal extends Creature {
     public final static double DEFAULT_WEIGHT = 0;
     public final static int MAX_COUNT = 0;
     public final static int REPRODUCE_CHANCE = 50;
-
     public Location location;
     private long id;
     private double weight;
     private boolean hasChild;
 
     public Animal(Location location) {
-        List<Creature> listCreatures = location.creaturesMap.get(this.getClass());
-
-        if (listCreatures != null) {
-            if (listCreatures.size() >= this.getMaxCount()) {
+        List<Animal> animalsList = location.animalsMap.get(this.getClass());
+        if (animalsList != null) {
+            if (animalsList.size() >= this.getMaxCount()) {
                 return;
             }
         }
         this.location = location;
         setId(ThreadLocalRandom.current().nextLong(0, Long.MAX_VALUE));
-        location.addCreature(this);
+        location.addAnimal(this);
         ++Island.getInstance().countAnimals;
-        new Life(this);
         Util.setMsg("Родился " + this);
     }
 
@@ -42,16 +36,14 @@ public abstract class Animal extends Creature {
     }
 
     public void reproduce() {
-        ArrayList<Creature> animalsList = location.creaturesMap.get(this.getClass());
+        ArrayList<Animal> animalsList = location.animalsMap.get(this.getClass());
         if (animalsList.size() < 2  || hasChild || getId() < 0) {
             return;
         }
-
-        if (new Random().nextInt(0, 100) >= getReproduceChance()) {
+        if (ThreadLocalRandom.current().nextInt(0, 100) >= getReproduceChance()) {
             Util.setMsg("Не получилось у " + this);
             return;
         }
-
         try {
             this.getClass().getConstructor(new Class[]{Location.class}).newInstance(location);
             hasChild = true;
@@ -62,11 +54,46 @@ public abstract class Animal extends Creature {
     }
 
     public void move() {
-
+        if (getId() < 0) {
+            return;
+        }
+        Location newLocation = null;
+        int direction = ThreadLocalRandom.current().nextInt(1,5);
+        switch (direction) {
+            case 1 -> {
+                if (location.y > 1) {
+                    newLocation = Island.getInstance().getLocation(location.x, location.y - 1);
+                    Util.setMsg(location + " " + this + " переместился вверх в " + newLocation);
+                }
+            }
+            case 2 -> {
+                if (location.x < Island.MAX_LATITUDE) {
+                    newLocation = Island.getInstance().getLocation(location.x + 1, location.y);
+                    Util.setMsg(location + " " + this + " переместился вправо в " + newLocation);
+                }
+            }
+            case 3 -> {
+                if (location.y < Island.MAX_LONGITUDE) {
+                    newLocation = Island.getInstance().getLocation(location.x, location.y + 1);
+                    Util.setMsg(location + " " + this + " переместился вниз в " + newLocation);
+                }
+            }
+            case 4 -> {
+                if (location.x > 1) {
+                    newLocation = Island.getInstance().getLocation(location.x - 1, location.y);
+                    Util.setMsg(location + " " + this + " переместился влево в " + newLocation);
+                }
+            }
+        }
+        if (location != newLocation && newLocation != null) {
+            location.deleteAnimal(this);
+            newLocation.addAnimal(this);
+            location = newLocation;
+        }
     }
 
     public void die() {
-        location.deleteCreature(this);
+        location.deleteAnimal(this);
         --Island.getInstance().countAnimals;
         Util.setMsg(this + " умер / был съеден");
         setId(-1);
@@ -90,7 +117,8 @@ public abstract class Animal extends Creature {
 
     public double getReproduceChance() {
         try {
-            return this.getClass().getField("REPRODUCE_CHANCE").getDouble(this) * getRatioWeight() * getRatioWeight();
+            return this.getClass().getField("REPRODUCE_CHANCE").getDouble(this)
+                    * getRatioWeight() * getRatioWeight();
         } catch (NoSuchFieldException | IllegalAccessException e) {
             return 0;
         }
