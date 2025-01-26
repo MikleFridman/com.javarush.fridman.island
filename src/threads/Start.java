@@ -42,8 +42,16 @@ public class Start extends Thread {
                 new Mouse(location);
             }
             for (int i = 1; i < ThreadLocalRandom.current()
+                    .nextInt(10, Sheep.MAX_COUNT / 2); i++) {
+                new Sheep(location);
+            }
+            for (int i = 1; i < ThreadLocalRandom.current()
                     .nextInt(2,Eagle.MAX_COUNT / 2);i++) {
                 new Eagle(location);
+            }
+            for (int i = 1; i < ThreadLocalRandom.current()
+                    .nextInt(2,Fox.MAX_COUNT / 2);i++) {
+                new Fox(location);
             }
         }
     }

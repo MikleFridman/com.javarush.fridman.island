@@ -1,12 +1,12 @@
 package creatures.animals;
 import location.Location;
 
-public class Duck extends Herbivore {
-    public final static double DEFAULT_WEIGHT = 1;
-    public final static int MAX_COUNT = 150;
+public class Sheep extends Herbivore {
+    public final static double DEFAULT_WEIGHT = 30;
+    public final static int MAX_COUNT = 200;
     public final static int REPRODUCE_CHANCE = 70;
 
-    public Duck(Location location) {
+    public Sheep(Location location) {
         super(location);
         setWeight(DEFAULT_WEIGHT);
     }

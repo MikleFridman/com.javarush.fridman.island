@@ -1,5 +1,4 @@
 package location;
-import creatures.Creature;
 import creatures.Plant;
 import creatures.animals.Animal;
 import creatures.animals.Herbivore;
@@ -38,10 +37,6 @@ public class Location {
                 "x=" + x +
                 ", y=" + y +
                 '}';
-    }
-
-    public ArrayList<Animal> getCreatureArray(Class<? extends Animal> clazz) {
-        return animalsMap.get(clazz);
     }
 
     public void addAnimal(Animal o) {

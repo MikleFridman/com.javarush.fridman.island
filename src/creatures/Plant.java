@@ -2,9 +2,9 @@ package creatures;
 import location.Location;
 import utils.Util;
 
-public class Plant extends Creature {
-    public final static int GROW_RATE = 150;
-    public final static int MAX_WEIGHT = 500;
+public class Plant {
+    public final static int GROW_RATE = 200;
+    public final static int MAX_WEIGHT = 600;
     public Location location;
     private double weight;
 
@@ -22,7 +22,7 @@ public class Plant extends Creature {
     }
 
     public void grow() {
-        if (getWeight() < MAX_WEIGHT) {
+        if (getWeight() + GROW_RATE <= MAX_WEIGHT) {
             setWeight(getWeight() + GROW_RATE);
             Util.setMsg(location + " Растет трава");
         }

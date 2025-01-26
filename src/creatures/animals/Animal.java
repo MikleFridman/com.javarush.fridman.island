@@ -1,5 +1,4 @@
 package creatures.animals;
-import creatures.Creature;
 import location.Island;
 import location.Location;
 import utils.Util;
@@ -8,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class Animal extends Creature {
+public abstract class Animal {
     public final static double DEFAULT_WEIGHT = 0;
     public final static int MAX_COUNT = 0;
     public final static int REPRODUCE_CHANCE = 50;
