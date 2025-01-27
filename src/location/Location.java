@@ -1,9 +1,8 @@
 package location;
 import creatures.Plant;
 import creatures.animals.Animal;
-import creatures.animals.Herbivore;
+import creatures.animals.herbivores.Herbivore;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -67,7 +66,7 @@ public class Location {
     }
 
     public synchronized List<Animal> getListHerbivore(Set<Class<? extends Herbivore>> classesSet) {
-        List<Animal> listHerbivore = new CopyOnWriteArrayList<>();
+        List<Animal> listHerbivore = new ArrayList<>();
         for (Class<? extends Animal> clazz : animalsMap.keySet()) {
             if (Herbivore.class.isAssignableFrom(clazz)) {
                 if (classesSet.contains(clazz) || classesSet.contains(Herbivore.class)) {

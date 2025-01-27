@@ -1,4 +1,4 @@
-package creatures.animals;
+package creatures.animals.herbivores;
 import location.Location;
 
 public class Duck extends Herbivore {

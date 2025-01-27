@@ -1,4 +1,6 @@
-package creatures.animals;
+package creatures.animals.predators;
+import creatures.animals.Animal;
+import creatures.animals.herbivores.Herbivore;
 import location.Location;
 import utils.Util;
 import java.util.Collections;

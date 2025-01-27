@@ -1,5 +1,6 @@
-package creatures.animals;
+package creatures.animals.herbivores;
 import creatures.Plant;
+import creatures.animals.Animal;
 import location.Location;
 import utils.Util;
 

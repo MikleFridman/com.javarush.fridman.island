@@ -1,5 +1,9 @@
-package creatures.animals;
+package creatures.animals.predators;
 
+import creatures.animals.herbivores.Duck;
+import creatures.animals.herbivores.Herbivore;
+import creatures.animals.herbivores.Mouse;
+import creatures.animals.herbivores.Rabbit;
 import location.Location;
 
 import java.util.HashMap;

@@ -1,6 +1,9 @@
 package threads;
 import creatures.Plant;
-import creatures.animals.*;
+import creatures.animals.herbivores.*;
+import creatures.animals.predators.Eagle;
+import creatures.animals.predators.Fox;
+import creatures.animals.predators.Wolf;
 import location.Island;
 import location.Location;
 import java.util.concurrent.ThreadLocalRandom;
@@ -22,19 +25,19 @@ public class Start extends Thread {
         for (Location location : island.locationsList) {
             new Plant(location);
             for (int i = 1; i < ThreadLocalRandom.current()
-                    .nextInt(4,Buffalo.MAX_COUNT / 2);i++) {
+                    .nextInt(4, Buffalo.MAX_COUNT / 2); i++) {
                 new Buffalo(location);
             }
             for (int i = 1; i < ThreadLocalRandom.current()
-                    .nextInt(8,Rabbit.MAX_COUNT / 2);i++) {
+                    .nextInt(8, Rabbit.MAX_COUNT / 2); i++) {
                 new Rabbit(location);
             }
             for (int i = 1; i < ThreadLocalRandom.current()
-                    .nextInt(2,Wolf.MAX_COUNT / 2);i++) {
+                    .nextInt(2, Wolf.MAX_COUNT / 2); i++) {
                 new Wolf(location);
             }
             for (int i = 1; i < ThreadLocalRandom.current()
-                    .nextInt(2,Duck.MAX_COUNT / 2);i++) {
+                    .nextInt(2, Duck.MAX_COUNT / 2); i++) {
                 new Duck(location);
             }
             for (int i = 1; i < ThreadLocalRandom.current()
@@ -46,11 +49,11 @@ public class Start extends Thread {
                 new Sheep(location);
             }
             for (int i = 1; i < ThreadLocalRandom.current()
-                    .nextInt(2,Eagle.MAX_COUNT / 2);i++) {
+                    .nextInt(2, Eagle.MAX_COUNT / 2); i++) {
                 new Eagle(location);
             }
             for (int i = 1; i < ThreadLocalRandom.current()
-                    .nextInt(2,Fox.MAX_COUNT / 2);i++) {
+                    .nextInt(2, Fox.MAX_COUNT / 2); i++) {
                 new Fox(location);
             }
         }

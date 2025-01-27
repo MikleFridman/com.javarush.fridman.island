@@ -1,8 +1,9 @@
 import location.Island;
 import location.Location;
-import threads.LifeTask;
+import threads.Life;
+import threads.Monitor;
 import threads.Start;
-import threads.GrowTask;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -10,12 +11,12 @@ import java.util.concurrent.TimeUnit;
 public class Main {
     public static void main(String[] args) {
         new Start();
-        GrowTask growTask = new GrowTask();
-        ScheduledExecutorService mainPool = Executors.newScheduledThreadPool(6);
-        mainPool.scheduleAtFixedRate(growTask,2,3, TimeUnit.SECONDS);
+        Monitor monitor = new Monitor();
+        ScheduledExecutorService mainPool = Executors.newScheduledThreadPool(8);
         for (Location location : Island.getInstance().locationsList) {
-            LifeTask lifeTask = new LifeTask(location);
-            mainPool.scheduleAtFixedRate(lifeTask, 3, 3, TimeUnit.SECONDS);
+            Life life = new Life(location);
+            mainPool.scheduleAtFixedRate(life, 1, 3, TimeUnit.SECONDS);
         }
+        mainPool.scheduleAtFixedRate(monitor,2,3, TimeUnit.SECONDS);
     }
 }

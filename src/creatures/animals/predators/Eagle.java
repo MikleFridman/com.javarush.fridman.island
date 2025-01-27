@@ -1,9 +1,13 @@
-package creatures.animals;
+package creatures.animals.predators;
+import creatures.animals.herbivores.Duck;
+import creatures.animals.herbivores.Herbivore;
+import creatures.animals.herbivores.Mouse;
+import creatures.animals.herbivores.Rabbit;
 import location.Location;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Eagle extends Predator{
+public class Eagle extends Predator {
     public final static double DEFAULT_WEIGHT = 10.0;
     public final static int MAX_COUNT = 40;
     public final static int REPRODUCE_CHANCE = 70;
