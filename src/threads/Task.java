@@ -10,7 +10,7 @@ public class Task {
 
     public void doTask() {
         animal.eat();
-        //animal.reproduce();
+        animal.reproduce();
         animal.move();
         animal.decreaseWeight();
     }
