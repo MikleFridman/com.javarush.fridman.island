@@ -26,7 +26,6 @@ public abstract class Animal {
         this.location = location;
         setId(ThreadLocalRandom.current().nextLong(0, Long.MAX_VALUE));
         location.addAnimal(this);
-        ++Island.getInstance().countAnimals;
         Util.setMsg("Родился " + this);
     }
 
@@ -93,7 +92,6 @@ public abstract class Animal {
 
     public void die() {
         location.deleteAnimal(this);
-        --Island.getInstance().countAnimals;
         Util.setMsg(this + " умер / был съеден");
         setId(-1);
     }

@@ -1,5 +1,6 @@
 package threads;
 import creatures.animals.Animal;
+import location.Island;
 import location.Location;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class Life implements Runnable{
     private final Location location;
     private final List<Animal> animalsList = new ArrayList<>();
-    private final Queue<Task> tasks  = new ConcurrentLinkedQueue<Task>();
+    private final Queue<Task> tasks  = new ConcurrentLinkedQueue<>();
 
 
     public Life(Location location) {
@@ -34,5 +35,6 @@ public class Life implements Runnable{
         }
         tasks.forEach(Task::doTask);
         tasks.clear();
+        System.out.println(location.getInfo());
     }
 }

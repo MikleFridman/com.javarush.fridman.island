@@ -7,7 +7,6 @@ public class Island {
     public static final int MAX_LATITUDE = 10;
     private static Island instance;
     public final List<Location> locationsList = new ArrayList<>();
-    public int countAnimals;
 
     private Island() {
 

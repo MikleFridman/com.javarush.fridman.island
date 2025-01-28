@@ -35,12 +35,8 @@ public abstract class Predator extends Animal {
         if (prey.getId() < 0) {
             return;
         }
-        try {
-            if (ThreadLocalRandom.current().nextInt(0, 100) >= getFoodChance(prey.getClass())) {
-                Util.setMsg(prey + " убежал от " + this);
-                return;
-            }
-        } catch (Exception e) {
+        if (ThreadLocalRandom.current().nextInt(0, 100) >= getFoodChance(prey.getClass())) {
+            Util.setMsg(prey + " убежал от " + this);
             return;
         }
         double foodWeight = Math.min(prey.getWeight(), getOriginalWeight() - getWeight());
