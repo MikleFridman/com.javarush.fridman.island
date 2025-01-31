@@ -22,7 +22,7 @@ public class Plant {
     }
 
     public void grow() {
-        if (getWeight() + GROW_RATE < MAX_WEIGHT) {
+        if (getWeight() + GROW_RATE <= MAX_WEIGHT) {
             setWeight(getWeight() + GROW_RATE);
             Util.setMsg(location + " Растет трава");
         }

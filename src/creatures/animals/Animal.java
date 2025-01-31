@@ -2,8 +2,8 @@ package creatures.animals;
 import location.Island;
 import location.Location;
 import utils.Util;
+
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -29,26 +29,27 @@ public abstract class Animal {
         Util.setMsg("Родился " + this);
     }
 
-    public void eat() {
-
-    }
+    public abstract boolean eat();
 
     public void reproduce() {
-        ArrayList<Animal> animalsList = location.animalsMap.get(this.getClass());
-        if (animalsList.size() < 2  || hasChild || getId() < 0) {
+        if (location.animalsMap.get(this.getClass()).size() < 2  || hasChild || getId() < 0) {
             return;
         }
         if (ThreadLocalRandom.current().nextInt(0, 100) >= getReproduceChance()) {
-            Util.setMsg("Не получилось у " + this);
-            return;
-        }
-        try {
-            this.getClass().getConstructor(new Class[]{Location.class}).newInstance(location);
+            try {
+                this.getClass().getConstructor(new Class[]{Location.class}).newInstance(location);
+            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
             hasChild = true;
-        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            throw new RuntimeException(e);
+            Util.setMsg(this + " успешно продолжил род ");
+        } else {
+            Util.setMsg("Не получилось у " + this);
         }
-        Util.setMsg(this + " успешно продолжил род ");
+    }
+
+    public void born() {
+
     }
 
     public void move() {

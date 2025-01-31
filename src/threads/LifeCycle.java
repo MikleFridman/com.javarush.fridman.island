@@ -1,6 +1,5 @@
 package threads;
 import creatures.animals.Animal;
-import location.Island;
 import location.Location;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,13 +7,12 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class Life implements Runnable{
+public class LifeCycle implements Runnable{
     private final Location location;
     private final List<Animal> animalsList = new ArrayList<>();
     private final Queue<Task> tasks  = new ConcurrentLinkedQueue<>();
 
-
-    public Life(Location location) {
+    public LifeCycle(Location location) {
         this.location = location;
     }
 
@@ -25,16 +23,14 @@ public class Life implements Runnable{
         }
         Collections.shuffle(animalsList);
         location.getPlant().grow();
-        location.getLock().lock();
-        try {
-            for (Animal animal : animalsList) {
+        for (Animal animal : animalsList) {
+            if (animal.getId() > 0) {
                 tasks.add(new Task(animal));
+            } else {
+                animal.location.deleteAnimal(animal);
             }
-        } finally {
-            location.getLock().unlock();
         }
         tasks.forEach(Task::doTask);
         tasks.clear();
-        System.out.println(location.getInfo());
     }
 }

@@ -11,7 +11,8 @@ import java.util.Map;
 
 public class Fox extends Predator {
     public final static double DEFAULT_WEIGHT = 20.0;
-    public final static int MAX_COUNT = 60;
+    public final static int MAX_COUNT = 40;
+    public final static int REPRODUCE_CHANCE = 50;
     public final static Map<Class<? extends Herbivore>, Integer> foodMap = new HashMap<>();
 
     static {

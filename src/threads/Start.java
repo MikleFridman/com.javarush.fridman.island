@@ -6,14 +6,14 @@ import creatures.animals.predators.Fox;
 import creatures.animals.predators.Wolf;
 import location.Island;
 import location.Location;
-import java.util.concurrent.ThreadLocalRandom;
+import utils.AnimalFactory;
+import utils.Dashboard;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Start extends Thread {
-
-    public Start() {
-        this.start();
-    }
-
     @Override
     public void run() {
         Island island = Island.getInstance();
@@ -24,39 +24,20 @@ public class Start extends Thread {
         }
         for (Location location : island.locationsList) {
             new Plant(location);
-            for (int i = 1; i < ThreadLocalRandom.current()
-                    .nextInt(4, Buffalo.MAX_COUNT / 2); i++) {
-                new Buffalo(location);
-            }
-            for (int i = 1; i < ThreadLocalRandom.current()
-                    .nextInt(8, Rabbit.MAX_COUNT / 2); i++) {
-                new Rabbit(location);
-            }
-            for (int i = 1; i < ThreadLocalRandom.current()
-                    .nextInt(2, Wolf.MAX_COUNT / 2); i++) {
-                new Wolf(location);
-            }
-            for (int i = 1; i < ThreadLocalRandom.current()
-                    .nextInt(2, Duck.MAX_COUNT / 2); i++) {
-                new Duck(location);
-            }
-            for (int i = 1; i < ThreadLocalRandom.current()
-                    .nextInt(10, Mouse.MAX_COUNT / 2); i++) {
-                new Mouse(location);
-            }
-            for (int i = 1; i < ThreadLocalRandom.current()
-                    .nextInt(10, Sheep.MAX_COUNT / 2); i++) {
-                new Sheep(location);
-            }
-            for (int i = 1; i < ThreadLocalRandom.current()
-                    .nextInt(2, Eagle.MAX_COUNT / 2); i++) {
-                new Eagle(location);
-            }
-            for (int i = 1; i < ThreadLocalRandom.current()
-                    .nextInt(2, Fox.MAX_COUNT / 2); i++) {
-                new Fox(location);
-            }
+            AnimalFactory.born(Buffalo.class, location);
+            AnimalFactory.born(Sheep.class, location);
+            AnimalFactory.born(Rabbit.class, location);
+            AnimalFactory.born(Mouse.class, location);
+            AnimalFactory.born(Duck.class, location);
+            AnimalFactory.born(Eagle.class, location);
+            AnimalFactory.born(Wolf.class, location);
+            AnimalFactory.born(Fox.class, location);
         }
+        ScheduledExecutorService mainPool = Executors.newScheduledThreadPool(8);
+        for (Location location : Island.getInstance().locationsList) {
+            mainPool.scheduleWithFixedDelay(new LifeCycle(location), 1, 3, TimeUnit.SECONDS);
+        }
+        mainPool.scheduleWithFixedDelay(new Dashboard(mainPool), 3,3, TimeUnit.SECONDS);
     }
 }
 

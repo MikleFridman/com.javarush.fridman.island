@@ -11,12 +11,11 @@ public abstract class Herbivore extends Animal {
     }
 
     @Override
-    public void eat() {
+    public boolean eat() {
         Plant plant = location.getPlant();
         if (plant == null || plant.getWeight() < 0.001 || getId() < 0) {
-            return;
+            return false;
         }
-
         double foodWeight = Math.min(plant.getWeight(), getOriginalWeight() - getWeight());
         foodWeight = (double) Math.round(foodWeight * 100) / 100;
         if (foodWeight > 0) {
@@ -24,5 +23,6 @@ public abstract class Herbivore extends Animal {
             setWeight(getWeight() + foodWeight);
             Util.setMsg(this + " cъел " + foodWeight + " травы");
         }
+        return true;
     }
 }

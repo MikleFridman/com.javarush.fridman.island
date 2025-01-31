@@ -3,23 +3,17 @@ import creatures.Plant;
 import creatures.animals.Animal;
 import creatures.animals.herbivores.Herbivore;
 import java.util.*;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Location {
     public int x;
     public int y;
     private Plant plant;
-    private final Lock lock = new ReentrantLock();
-    public final Map<Class<? extends Animal>, ArrayList<Animal>> animalsMap = new HashMap<>();
+    public final Map<Class<? extends Animal>, ArrayList<Animal>> animalsMap = new ConcurrentHashMap<>();
 
     public Location(int x, int y) {
         this.x = x;
         this.y = y;
-    }
-
-    public Lock getLock() {
-        return lock;
     }
 
     public Plant getPlant() {
@@ -47,14 +41,16 @@ public class Location {
         } else {
             list.add(o);
         }
+        Island.getInstance().addAnimal(o);
     }
 
     public void deleteAnimal(Animal o) {
         List<Animal> list = animalsMap.get(o.getClass());
         list.remove(o);
+        Island.getInstance().deleteAnimal(o);
     }
 
-    public String getInfo(){
+    public synchronized String getInfo(){
         StringBuilder info = new StringBuilder("" + this);
         for (Class<? extends Animal> o : animalsMap.keySet()) {
             info.append(" ").append(o.getSimpleName()).append(": ")

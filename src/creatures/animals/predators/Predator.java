@@ -21,23 +21,23 @@ public abstract class Predator extends Animal {
     }
 
     @Override
-    public void eat() {
+    public boolean eat() {
         if (getId() < 0) {
-            return;
+            return false;
         }
         List<Animal> listHerbivore;
         listHerbivore = location.getListHerbivore(getFoodMap().keySet());
         if (listHerbivore == null || listHerbivore.isEmpty()) {
-            return;
+            return false;
         }
         Collections.shuffle(listHerbivore);
         Herbivore prey = (Herbivore) listHerbivore.get(0);
         if (prey.getId() < 0) {
-            return;
+            return false;
         }
         if (ThreadLocalRandom.current().nextInt(0, 100) >= getFoodChance(prey.getClass())) {
             Util.setMsg(prey + " убежал от " + this);
-            return;
+            return false;
         }
         double foodWeight = Math.min(prey.getWeight(), getOriginalWeight() - getWeight());
         foodWeight = (double) Math.round(foodWeight * 100) / 100;
@@ -46,6 +46,7 @@ public abstract class Predator extends Animal {
             Util.setMsg(this + " cъел " + foodWeight + " от " + prey);
             prey.die();
         }
+        return true;
     }
 
     public Map<Class<? extends Herbivore>, Integer> getFoodMap() {
