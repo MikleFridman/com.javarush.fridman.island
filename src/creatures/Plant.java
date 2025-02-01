@@ -3,8 +3,8 @@ import location.Location;
 import utils.Util;
 
 public class Plant {
-    public final static int GROW_RATE = 300;
-    public final static int MAX_WEIGHT = 600;
+    public final static int GROW_RATE = 1200;
+    public final static int MAX_WEIGHT = 3600;
     public Location location;
     private double weight;
 

@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public abstract class Animal {
     public final static double DEFAULT_WEIGHT = 0;
     public final static int MAX_COUNT = 0;
-    public final static int REPRODUCE_CHANCE = 50;
+    public final static int REPRODUCE_CHANCE = 10;
     public Location location;
     private long id;
     private double weight;
@@ -35,21 +35,17 @@ public abstract class Animal {
         if (location.animalsMap.get(this.getClass()).size() < 2  || hasChild || getId() < 0) {
             return;
         }
-        if (ThreadLocalRandom.current().nextInt(0, 100) >= getReproduceChance()) {
+        if (ThreadLocalRandom.current().nextInt(0, 100) <= getReproduceChance()) {
             try {
                 this.getClass().getConstructor(new Class[]{Location.class}).newInstance(location);
             } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-                e.printStackTrace();
+                return;
             }
             hasChild = true;
             Util.setMsg(this + " успешно продолжил род ");
         } else {
             Util.setMsg("Не получилось у " + this);
         }
-    }
-
-    public void born() {
-
     }
 
     public void move() {
@@ -113,10 +109,9 @@ public abstract class Animal {
         this.weight = Math.min(weight, getOriginalWeight());
     }
 
-    public double getReproduceChance() {
+    public int getReproduceChance() {
         try {
-            return this.getClass().getField("REPRODUCE_CHANCE").getDouble(this)
-                    * getRatioWeight() * getRatioWeight();
+            return this.getClass().getField("REPRODUCE_CHANCE").getInt(this);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             return 0;
         }

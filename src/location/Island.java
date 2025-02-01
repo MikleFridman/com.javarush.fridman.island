@@ -1,19 +1,19 @@
 package location;
 import creatures.animals.Animal;
-
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Island {
-    public static final int MAX_LONGITUDE = 20;
-    public static final int MAX_LATITUDE = 10;
-    public static final int MAX_CYCLES = 20;
+    public static final int MAX_LONGITUDE = 100;
+    public static final int MAX_LATITUDE = 20;
+    public static final int MAX_CYCLES = 31;
     private static Island instance;
     public int cycle = 1;
-    public final List<Location> locationsList = new CopyOnWriteArrayList<>();
-    public final Map<Class<?>, Integer> infoMap = new ConcurrentHashMap<>();
+    public final List<Location> locationsList = new ArrayList<>();
+    public final Map<Class<? extends Animal>, Integer> infoMap = new HashMap<>();
+    public volatile double weightPlant;
 
     public static Island getInstance() {
         if (instance == null) {
@@ -30,26 +30,28 @@ public class Island {
         return null;
     }
 
-    public synchronized void addAnimal(Animal o) {
-        if (infoMap.containsKey(o.getClass())) {
-            infoMap.put(o.getClass(), infoMap.get(o.getClass()) + 1);
-        } else {
-            infoMap.put(o.getClass(), 1);
-        }
-    }
-
-    public synchronized void deleteAnimal(Animal o) {
-        if (infoMap.containsKey(o.getClass())) {
-            infoMap.put(o.getClass(), Math.max(infoMap.get(o.getClass()) - 1, 0));
-        }
-    }
-
     public synchronized String getInfo() {
+        infoMap.clear();
+        weightPlant = 0;
+        for (Location location : locationsList) {
+            weightPlant = weightPlant + location.getPlant().getWeight();
+            for (Class<? extends Animal> animalClass : location.animalsMap.keySet()) {
+                if (infoMap.containsKey(animalClass)) {
+                    infoMap.put(animalClass, infoMap.get(animalClass)
+                            + location.animalsMap.get(animalClass).size());
+                } else {
+                    infoMap.put(animalClass, location.animalsMap.get(animalClass).size());
+                }
+            }
+        }
         StringBuilder info = new StringBuilder("Day: " + cycle + " ");
         for (Class<?> o : infoMap.keySet()) {
-            info.append(o.getSimpleName()).append(": ").append(infoMap.get(o)).append(" ");
+            if (infoMap.get(o) > 0) {
+                info.append(o.getSimpleName()).append(": ")
+                    .append(infoMap.get(o)).append(" ");
+            }
         }
-        ++cycle;
+        info.append("Plant: ").append((double) Math.round(weightPlant * 100) / 100);
         return info.toString();
     }
 }

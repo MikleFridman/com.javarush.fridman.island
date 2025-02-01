@@ -1,14 +1,10 @@
 package threads;
 import creatures.Plant;
 import creatures.animals.herbivores.*;
-import creatures.animals.predators.Eagle;
-import creatures.animals.predators.Fox;
-import creatures.animals.predators.Wolf;
+import creatures.animals.predators.*;
 import location.Island;
 import location.Location;
 import utils.AnimalFactory;
-import utils.Dashboard;
-
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -34,10 +30,7 @@ public class Start extends Thread {
             AnimalFactory.born(Fox.class, location);
         }
         ScheduledExecutorService mainPool = Executors.newScheduledThreadPool(8);
-        for (Location location : Island.getInstance().locationsList) {
-            mainPool.scheduleWithFixedDelay(new LifeCycle(location), 1, 3, TimeUnit.SECONDS);
-        }
-        mainPool.scheduleWithFixedDelay(new Dashboard(mainPool), 3,3, TimeUnit.SECONDS);
+        mainPool.scheduleWithFixedDelay(new ExecutorService(mainPool), 1,2, TimeUnit.SECONDS);
     }
 }
 

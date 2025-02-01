@@ -9,8 +9,9 @@ public class Task {
     }
 
     public void doTask() {
-        animal.eat();
-        animal.reproduce();
+        if (animal.eat()) {
+            animal.reproduce();
+        }
         animal.move();
         animal.decreaseWeight();
     }

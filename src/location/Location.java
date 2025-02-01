@@ -2,14 +2,18 @@ package location;
 import creatures.Plant;
 import creatures.animals.Animal;
 import creatures.animals.herbivores.Herbivore;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Location {
     public int x;
     public int y;
     private Plant plant;
-    public final Map<Class<? extends Animal>, ArrayList<Animal>> animalsMap = new ConcurrentHashMap<>();
+    public final Map<Class<? extends Animal>, CopyOnWriteArrayList<Animal>> animalsMap = new ConcurrentHashMap<>();
 
     public Location(int x, int y) {
         this.x = x;
@@ -35,26 +39,24 @@ public class Location {
     public void addAnimal(Animal o) {
         List<Animal> list = animalsMap.get(o.getClass());
         if (list == null) {
-            var newList = new ArrayList<Animal>();
+            var newList = new CopyOnWriteArrayList<Animal>();
             newList.add(o);
             animalsMap.put(o.getClass(),newList);
         } else {
             list.add(o);
         }
-        Island.getInstance().addAnimal(o);
     }
 
     public void deleteAnimal(Animal o) {
         List<Animal> list = animalsMap.get(o.getClass());
         list.remove(o);
-        Island.getInstance().deleteAnimal(o);
     }
 
     public synchronized String getInfo(){
-        StringBuilder info = new StringBuilder("" + this);
+        StringBuilder info = new StringBuilder(this + " ");
         for (Class<? extends Animal> o : animalsMap.keySet()) {
-            info.append(" ").append(o.getSimpleName()).append(": ")
-                .append(animalsMap.get(o).toArray().length).append(";");
+            info.append(o.getSimpleName()).append(": ")
+                .append(animalsMap.get(o).size()).append("; ");
         }
         double weightPlant = (double) Math.round(getPlant().getWeight() * 100) / 100;
         info.append(" Plant: ").append(weightPlant);

@@ -1,6 +1,7 @@
 package threads;
 import creatures.animals.Animal;
 import location.Location;
+import utils.Util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,8 +19,8 @@ public class LifeCycle implements Runnable{
 
     @Override
     public void run() {
-        for (Class<? extends Animal> clazz : location.animalsMap.keySet()) {
-            animalsList.addAll(location.animalsMap.get(clazz));
+        for (Class<? extends Animal> animalClass : location.animalsMap.keySet()) {
+            animalsList.addAll(location.animalsMap.get(animalClass));
         }
         Collections.shuffle(animalsList);
         location.getPlant().grow();
@@ -32,5 +33,6 @@ public class LifeCycle implements Runnable{
         }
         tasks.forEach(Task::doTask);
         tasks.clear();
+        Util.setMsg(location.getInfo());
     }
 }
